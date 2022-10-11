@@ -1,12 +1,16 @@
+from random import sample
+
 import torch
-from torch import nn
 from torch.utils.data import Dataset
-from torchvision import datasets
 
 from .KG_utils import triplet_initializer
 
-class KnowledgeGraphDataset(Dataset):
+class KnowledgeGraph(Dataset):
     def __init__(self, root) -> None:
+        """
+        Args:
+            root (str): path trough the knowledge graph as txt file
+        """
         super().__init__()
         
         entities_to_ids, relations_to_ids, ids_to_entities, ids_to_relation, triplets = triplet_initializer(root)
@@ -32,3 +36,15 @@ class KnowledgeGraphDataset(Dataset):
     
     def __getitem__(self, idx):
         return self.triplets[idx]
+    
+    def generate_false_entities_candidate(self, batch_size):
+        """Dumb false entities generation candidate : the canditate is choosed randomly in the set
+
+        Args:
+            batch_size (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        num_entities = self.__len_entities__()
+        return [torch.tensor(sample(range(0, num_entities), batch_size)), torch.tensor(sample(range(0, num_entities), batch_size))]

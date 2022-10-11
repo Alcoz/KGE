@@ -1,3 +1,4 @@
+import torch
 
 def triplet_initializer(dataset_file):
     file = open(dataset_file, "r")
@@ -10,7 +11,6 @@ def triplet_initializer(dataset_file):
     triplets = []
     
     for line in file:
-        
         
         ent1, rel, ent2 = line.split(sep="\t")
         
